@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import intl package for date formatting
+import 'package:intl/intl.dart'; 
 
 Widget buildDateAndDayCards(
     String date, String day, String formattedDate, String formattedDay) {
-  // Format current day
+  
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,7 +71,7 @@ Widget buildCategoryCard(int index, TextEditingController bagsController,
     "Paper"
   ];
   String category =
-      categories[index - 1]; // Adjust index to access correct category
+      categories[index - 1]; 
 
   return Card(
     child: Padding(
@@ -80,7 +80,7 @@ Widget buildCategoryCard(int index, TextEditingController bagsController,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '$category', // Display category from list
+            '$category',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 5),
@@ -123,7 +123,7 @@ Widget buildRemarksCard(TextEditingController remarksController) {
           ),
           SizedBox(height: 10),
           TextField(
-            controller: remarksController, // Use remarksController here
+            controller: remarksController, 
             decoration: InputDecoration(
               hintText: 'Remarks',
               hintStyle: TextStyle(fontSize: 16),

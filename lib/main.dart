@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'widgets.dart'; // Import other dependencies as needed
-import 'dropdown.dart'; // Import other dependencies as needed
-import 'communityList.dart'; // Import the CommunityListBuilder widget
+import 'widgets.dart';
+import 'dropdown.dart'; 
+import 'communityList.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -51,8 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String? selectedDropdownValue;
   String formattedDate =
-      DateFormat('dd-MM-yyyy').format(DateTime.now()); // Format current date
-  String formattedDate1 = DateFormat('yyyy-MM-dd').format(DateTime.now()); // F
+      DateFormat('dd-MM-yyyy').format(DateTime.now()); 
+  String formattedDate1 = DateFormat('yyyy-MM-dd').format(DateTime.now()); 
   String formattedDay = DateFormat('EEEE').format(DateTime.now());
 
   @override
@@ -60,57 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     communities = fetchCommunities();
-  }
-
-  Future<List<Community>> fetchCommunities() async {
-    final response = await http
-        .get(Uri.parse('http://localhost:4000/api/list_of_communities'));
-
-    if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = jsonDecode(response.body);
-      List<Community> communities =
-          jsonResponse.map((json) => Community.fromJson(json)).toList();
-
-      return communities;
-    } else {
-      throw Exception('Failed to load communities');
-    }
-  }
-
-  Future<CommunityData> createCommunityData(CommunityData communityData) async {
-    var headers = {'Content-Type': 'application/json'};
-    var request =
-        http.Request('POST', Uri.parse('http://localhost:4000/api/add_waste'));
-    request.body = json.encode({
-      'date': communityData.date,
-      'community_id': communityData.communityId,
-      'mixed_bags': communityData.mixedBags,
-      'glass_bags': communityData.glassBags,
-      'plastic_bags': communityData.plasticBags,
-      'paper_bags': communityData.paperBags,
-      'seg_lf_bags': communityData.segLfBags,
-      'sanitory_bags': communityData.sanitoryBags,
-      'kg_of_glass': communityData.kgOfGlass,
-      'kg_of_mixed': communityData.kgOfMixed,
-      'kg_of_plastic': communityData.kgOfPlastic,
-      'kg_of_paper': communityData.kgOfPaper,
-      'kg_of_seg_lf': communityData.kgOfSegLf,
-      'kg_of_sanitory': communityData.kgOfSanitory,
-      'comments': communityData.comments,
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-print(response.statusCode);
-    if (response.statusCode == 201) {
-      final responseBody = await utf8.decodeStream(response.stream);
-      print(responseBody);
-      final decodedData = jsonDecode(responseBody);
-      return CommunityData.fromJson(decodedData as Map<String, dynamic>);
-    } else {
-      throw Exception(
-          'Failed to create community data: ${response.reasonPhrase}');
-    }
   }
 
   @override
@@ -144,7 +93,6 @@ print(response.statusCode);
                   communities: communities,
                   onDropdownChanged: (community) {
                     if (community != null) {
-                      // Check if community is not null
                       setState(() {
                         selectedDropdownValue = community.id;
                       });
@@ -164,7 +112,7 @@ print(response.statusCode);
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         CommunityData communityData = CommunityData(
-                          date: "~D[2024-12-31]",
+                          date: "~D[$formattedDate1]",
                           communityId: selectedDropdownValue ?? "",
                           mixedBags: int.parse(bagsController1.text),
                           kgOfMixed: double.parse(kgController1.text),
@@ -180,27 +128,22 @@ print(response.statusCode);
                           kgOfSanitory: double.parse(kgController6.text),
                           comments: remarksController.text,
                         );
-                        print('date: ${communityData.date}');
-                        print('community_id: ${communityData.communityId}');
-                        print('mixed_bags: ${communityData.mixedBags}');
-                        print('glass_bags: ${communityData.glassBags}');
-                        print('plastic_bags: ${communityData.plasticBags}');
-                        print('paper_bags: ${communityData.paperBags}');
-                        print('seg_lf_bags: ${communityData.segLfBags}');
-                        print('sanitory_bags: ${communityData.sanitoryBags}');
-                        print('kg_of_glass: ${communityData.kgOfGlass}');
-                        print('kg_of_mixed: ${communityData.kgOfMixed}');
-                        print('kg_of_plastic: ${communityData.kgOfPlastic}');
-                        print('kg_of_paper: ${communityData.kgOfPaper}');
-                        print('kg_of_seg_lf: ${communityData.kgOfSegLf}');
-                        print('kg_of_sanitory: ${communityData.kgOfSanitory}');
-                        print('comments: ${communityData.comments}');
-                        CommunityData createdData = await createCommunityData(
-                          communityData, /* pass community object here */
-                        );
 
-                        print(
-                            "Community data created successfully: $createdData");
+                        CommunityData? createdData =
+                            await createCommunityData(communityData, context);
+                        remarksController.clear();
+                        bagsController1.clear();
+                        kgController1.clear();
+                        bagsController2.clear();
+                        kgController2.clear();
+                        bagsController3.clear();
+                        kgController3.clear();
+                        bagsController4.clear();
+                        kgController4.clear();
+                        bagsController5.clear();
+                        kgController5.clear();
+                        bagsController6.clear();
+                        kgController6.clear();
                       }
                     },
                     style: ElevatedButton.styleFrom(
